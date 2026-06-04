@@ -17,6 +17,7 @@
  */
 
 import { useState } from 'react';
+import type { TouchEvent } from 'react';
 import type { Lesson, LessonProgress, VimMode } from '../../types/lesson';
 import { VimEditor } from '../editor/VimEditor';
 import { LessonPanel } from '../lessons/LessonPanel';
@@ -88,6 +89,40 @@ export function AppShell({
   const containerClass = className ? `${base} ${className}` : base;
 
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [mobileView, setMobileView] = useState<'lessons' | 'lesson' | 'editor'>('lesson');
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  const handleSelectLesson = (lessonId: string) => {
+    onSelectLesson(lessonId);
+    setMobileView('lesson'); // switch to lesson view when a lesson is picked
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    // Don't intercept swipe inside the CodeMirror editor to prevent breaking its native scrolling/selection
+    if ((e.target as Element).closest('.cm-editor')) return;
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStart === null) return;
+    if ((e.target as Element).closest('.cm-editor')) {
+      setTouchStart(null);
+      return;
+    }
+    const touchEnd = e.changedTouches[0].clientX;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      if (mobileView === 'lessons') setMobileView('lesson');
+      else if (mobileView === 'lesson') setMobileView('editor');
+    } else if (isRightSwipe) {
+      if (mobileView === 'editor') setMobileView('lesson');
+      else if (mobileView === 'lesson') setMobileView('lessons');
+    }
+    setTouchStart(null);
+  };
 
   const handleResetAllClick = () => {
     setIsResetDialogOpen(true);
@@ -103,7 +138,11 @@ export function AppShell({
   };
 
   return (
-    <div className={containerClass}>
+    <div 
+      className={containerClass}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <header className="shrink-0 flex flex-wrap items-center gap-4 px-4 py-2.5 border-b border-[#30363d] bg-[#161b22]">
@@ -133,6 +172,37 @@ export function AppShell({
         </Button>
       </header>
 
+      {/* ── Mobile View Switcher ─────────────────────────────────────────── */}
+      <nav className="lg:hidden flex shrink-0 border-b border-[#30363d] bg-[#161b22]" aria-label="Mobile view switcher">
+        <button
+          onClick={() => setMobileView('lessons')}
+          aria-pressed={mobileView === 'lessons'}
+          className={`flex-1 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            mobileView === 'lessons' ? 'border-[#58a6ff] text-[#58a6ff]' : 'border-transparent text-[#8b949e] hover:text-[#e6edf3]'
+          }`}
+        >
+          Lessons
+        </button>
+        <button
+          onClick={() => setMobileView('lesson')}
+          aria-pressed={mobileView === 'lesson'}
+          className={`flex-1 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            mobileView === 'lesson' ? 'border-[#58a6ff] text-[#58a6ff]' : 'border-transparent text-[#8b949e] hover:text-[#e6edf3]'
+          }`}
+        >
+          Lesson
+        </button>
+        <button
+          onClick={() => setMobileView('editor')}
+          aria-pressed={mobileView === 'editor'}
+          className={`flex-1 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            mobileView === 'editor' ? 'border-[#58a6ff] text-[#58a6ff]' : 'border-transparent text-[#8b949e] hover:text-[#e6edf3]'
+          }`}
+        >
+          Editor
+        </button>
+      </nav>
+
       {/* ── Body (sidebar + main) ────────────────────────────────────────── */}
       <div className="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
 
@@ -140,11 +210,9 @@ export function AppShell({
         <aside
           aria-label="Lesson roadmap"
           className={[
-            // On mobile, sidebar sits above main as a horizontal strip.
-            // On large screens, it becomes a fixed-width vertical sidebar.
-            'shrink-0 border-r border-[#30363d]',
+            'shrink-0 lg:border-r border-[#30363d]',
+            mobileView === 'lessons' ? 'block flex-1' : 'hidden lg:block',
             'w-full lg:w-56 xl:w-64',
-            'max-h-40 lg:max-h-none',
             'overflow-y-auto',
           ].join(' ')}
         >
@@ -152,7 +220,7 @@ export function AppShell({
             lessons={lessons}
             currentLessonId={currentLesson.id}
             progress={progress}
-            onSelectLesson={onSelectLesson}
+            onSelectLesson={handleSelectLesson}
             className="h-full"
           />
         </aside>
@@ -160,7 +228,11 @@ export function AppShell({
         {/* ── Main content: LessonPanel + VimEditor ────────────────────── */}
         <main
           aria-label="Lesson content and editor"
-          className="flex flex-1 min-w-0 min-h-0 flex-col lg:grid lg:grid-cols-[minmax(22rem,1fr)_minmax(0,50vw)] overflow-hidden"
+          className={[
+            'flex-1 min-w-0 min-h-0',
+            mobileView !== 'lessons' ? 'flex flex-col lg:grid' : 'hidden lg:grid',
+            'lg:grid-cols-[minmax(22rem,1fr)_minmax(0,50vw)] overflow-hidden'
+          ].join(' ')}
         >
           {/* Lesson panel */}
           <LessonPanel
@@ -174,7 +246,11 @@ export function AppShell({
             onReset={onResetLesson}
             onUseHint={onUseHint}
             onCheckMission={onCheckMission}
-            className="min-w-0 lg:border-r lg:border-[#30363d] border-b lg:border-b-0 border-[#30363d] max-h-[40vh] lg:max-h-none overflow-y-auto overflow-x-hidden"
+            className={[
+              'min-w-0 lg:border-r lg:border-[#30363d]',
+              mobileView === 'lesson' ? 'flex-1 overflow-y-auto' : 'hidden lg:block',
+              'overflow-x-hidden lg:max-h-none'
+            ].join(' ')}
           />
 
           {/* Vim editor — takes remaining space */}
@@ -189,7 +265,10 @@ export function AppShell({
             onContentChange={onEditorContentChange}
             onModeChange={onEditorModeChange}
             onWriteCommand={onWriteCommand}
-            className="flex-1 min-w-0 min-h-0 rounded-none border-0 shadow-none"
+            className={[
+              'min-w-0 min-h-0 rounded-none border-0 shadow-none',
+              mobileView === 'editor' ? 'flex-1' : 'hidden lg:block lg:flex-1'
+            ].join(' ')}
           />
         </main>
       </div>

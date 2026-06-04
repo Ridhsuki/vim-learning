@@ -158,3 +158,44 @@ test.describe('VimTutor E2E', () => {
     await expect(page.getByText('✓ Complete')).not.toBeVisible();
   });
 });
+
+test.describe('VimTutor Mobile E2E', () => {
+  test.use({ viewport: { width: 375, height: 667 } }); // iPhone SE viewport
+
+  test('mobile layout provides navigation tabs and switches views', async ({ page }) => {
+    await page.goto('/');
+
+    // Check if the navigation tabs appear
+    const nav = page.getByRole('navigation', { name: 'Mobile view switcher' });
+    await expect(nav).toBeVisible();
+
+    const btnLessons = page.getByRole('button', { name: 'Lessons', exact: true });
+    const btnLesson = page.getByRole('button', { name: 'Lesson', exact: true });
+    const btnEditor = page.getByRole('button', { name: 'Editor', exact: true });
+
+    // Ensure they are all visible
+    await expect(btnLessons).toBeVisible();
+    await expect(btnLesson).toBeVisible();
+    await expect(btnEditor).toBeVisible();
+
+    // Default view is Lesson, so Editor and Lessons lists should be hidden
+    await expect(page.getByRole('complementary', { name: 'Lesson roadmap' })).toBeHidden();
+    
+    // Switch to Lessons
+    await btnLessons.click();
+    await expect(page.getByRole('complementary', { name: 'Lesson roadmap' })).toBeVisible();
+    
+    // Select a lesson from the list
+    const modesIntroBtn = page.getByRole('button', { name: /What is a Mode\?/ });
+    await modesIntroBtn.click();
+    
+    // After selection, it should automatically switch to Lesson view
+    await expect(page.getByRole('complementary', { name: 'Lesson roadmap' })).toBeHidden();
+    await expect(page.getByRole('heading', { name: 'What is a Mode?' })).toBeVisible();
+
+    // Switch to Editor
+    await btnEditor.click();
+    // In Editor view, the code mirror container should be visible and take up space
+    await expect(page.locator('.cm-editor')).toBeVisible();
+  });
+});

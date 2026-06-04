@@ -571,10 +571,10 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 
 ---
 
-### T-31: Mobile Responsive Layout
-**Status:** `TODO`
-- [ ] Single-column layout for viewports < 768px
-- [ ] Swipe to navigate between lesson panel and editor
+### T-31: Advanced Mobile UX
+**Status:** `DONE`
+- [x] Implement swipe navigation or bottom nav bar for small viewports
+- [x] Make lesson panel and editor responsive and stackableditor
 
 ---
 
