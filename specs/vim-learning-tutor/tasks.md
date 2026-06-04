@@ -85,7 +85,7 @@ npm install -D typescript @typescript-eslint/parser @typescript-eslint/eslint-pl
 ---
 
 ### T-05: Create Lesson Data File
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-04
 **Reviewable by:** TypeScript type-check + manual review of content
 
@@ -114,134 +114,134 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 | `search` | Search (`/ n N * #`) | Ch.12: Search |
 
 **Checklist:**
-- [ ] All lessons conform to `Lesson` type
-- [ ] Each lesson has a working `validation.check` function
-- [ ] Content is accurate (correct casing: `h j k l`, not `H J K L`)
-- [ ] `initialContent` strings are appropriate for each mission
+- [x] All lessons conform to `Lesson` type
+- [x] Each lesson has a working `validation.check` function
+- [x] Content is accurate (correct casing: `h j k l`, not `H J K L`)
+- [x] `initialContent` strings are appropriate for each mission
 
 ---
 
 ## Phase 2: Storage & Hooks
 
 ### T-06: Create Safe localStorage Wrapper
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-04
 **Reviewable by:** unit test
 
 **File:** `src/lib/storage.ts`
-- [ ] `loadProgress(): AppProgress | null` — reads and parses from localStorage
-- [ ] `saveProgress(p: AppProgress): void` — stringifies and writes
-- [ ] `clearProgress(): void` — removes the key
-- [ ] All functions wrapped in try/catch
-- [ ] Version check: if stored `version !== CURRENT_VERSION`, return `null`
+- [x] `loadProgress(): AppProgress | null` — reads and parses from localStorage
+- [x] `saveProgress(p: AppProgress): void` — stringifies and writes
+- [x] `clearProgress(): void` — removes the key
+- [x] All functions wrapped in try/catch
+- [x] Version check: if stored `version !== CURRENT_VERSION`, return `null`
 
 ---
 
 ### T-07: Create Lesson Validation Library
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-04
 **Reviewable by:** unit test
 
 **File:** `src/lib/lessonValidation.ts`
-- [ ] `validateLesson(lesson: Lesson, content: string, mode: VimMode): boolean`
-- [ ] Pure function, no side effects
-- [ ] Handles all three `ValidationTrigger` types gracefully
+- [x] `validateLesson(lesson: Lesson, content: string, mode: VimMode): boolean`
+- [x] Pure function, no side effects
+- [x] Handles all three `ValidationTrigger` types gracefully
 
 ---
 
 ### T-08: Create `useLessonProgress` Hook
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-06, T-05
 **Reviewable by:** unit test + component test
 
 **File:** `src/hooks/useLessonProgress.ts`
-- [ ] Loads progress from storage on mount
-- [ ] Exposes `currentLesson: Lesson`
-- [ ] Exposes `progress: AppProgress`
-- [ ] Exposes `navigateTo(id: string): void`
-- [ ] Exposes `markComplete(id: string): void`
-- [ ] Exposes `useHint(id: string): void`
-- [ ] Exposes `resetAll(): void`
-- [ ] Saves to storage on every state change
+- [x] Loads progress from storage on mount
+- [x] Exposes `currentLesson: Lesson`
+- [x] Exposes `progress: AppProgress`
+- [x] Exposes `navigateTo(id: string): void`
+- [x] Exposes `markComplete(id: string): void`
+- [x] Exposes `useHint(id: string): void`
+- [x] Exposes `resetAll(): void`
+- [x] Saves to storage on every state change
 
 ---
 
 ## Phase 3: Editor Integration
 
 ### T-09: Create `useVimEditor` Hook
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-01, T-04
 **Reviewable by:** visual test in browser (editor renders and Vim bindings work)
 
 **File:** `src/hooks/useVimEditor.ts`
-- [ ] Creates CodeMirror `EditorView` on mount using a `useRef` for the DOM element
-- [ ] Attaches `vim()` extension from `@replit/codemirror-vim`
-- [ ] Applies dark theme (`@codemirror/theme-one-dark`)
-- [ ] Attaches line numbers, search, and base keymaps
-- [ ] Subscribes to Vim mode change events and lifts mode to React state
-- [ ] Exposes `editorContainerRef` for DOM mounting
-- [ ] Exposes `currentMode: VimMode`
-- [ ] Exposes `resetContent(content: string): void`
-- [ ] Exposes `getContent(): string`
-- [ ] Cleans up `EditorView` on unmount
+- [x] Creates CodeMirror `EditorView` on mount using a `useRef` for the DOM element
+- [x] Attaches `vim()` extension from `@replit/codemirror-vim`
+- [x] Applies dark theme (`@codemirror/theme-one-dark`)
+- [x] Attaches line numbers, search, and base keymaps
+- [x] Subscribes to Vim mode change events and lifts mode to React state
+- [x] Exposes `editorContainerRef` for DOM mounting
+- [x] Exposes `currentMode: VimMode`
+- [x] Exposes `resetContent(content: string): void`
+- [x] Exposes `getContent(): string`
+- [x] Cleans up `EditorView` on unmount
 
 ---
 
 ### T-10: Create `VimEditor` Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-09
 **Reviewable by:** visual test — editor renders, Vim modes work, reset works
 
 **File:** `src/components/editor/VimEditor.tsx`
-- [ ] Mounts the CodeMirror container div
-- [ ] Passes `initialContent` as prop; resets editor on prop change
-- [ ] Calls `onModeChange` callback when mode changes
-- [ ] Calls `onContentChange` callback (debounced, 300ms) when content changes
-- [ ] Does NOT contain any validation or business logic
+- [x] Mounts the CodeMirror container div
+- [x] Passes `initialContent` as prop; resets editor on prop change
+- [x] Calls `onModeChange` callback when mode changes
+- [x] Calls `onContentChange` callback (debounced, 300ms) when content changes
+- [x] Does NOT contain any validation or business logic
 
 ---
 
 ### T-11: Create `ModeIndicator` Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-09
 **Reviewable by:** visual test — badge color/text changes with mode
 
 **File:** `src/components/editor/ModeIndicator.tsx`
-- [ ] Accepts `mode: VimMode` prop
-- [ ] Renders colored badge: green=Normal, blue=Insert, purple=Visual, orange=Command
-- [ ] Uses `aria-live="polite"` for accessibility
-- [ ] Text label is always visible (not icon-only)
+- [x] Accepts `mode: VimMode` prop
+- [x] Renders colored badge: green=Normal, blue=Insert, purple=Visual, orange=Command
+- [x] Uses `aria-live="polite"` for accessibility
+- [x] Text label is always visible (not icon-only)
 
 ---
 
 ## Phase 4: UI Components
 
 ### T-12: Create Base UI Components
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-02
 **Reviewable by:** visual inspection + accessibility check
 
 **Files:**
-- [ ] `src/components/ui/Button.tsx` — variant: `primary | secondary | ghost | danger`, size: `sm | md`
-- [ ] `src/components/ui/Badge.tsx` — color variants matching mode colors
-- [ ] `src/components/ui/Kbd.tsx` — keyboard key display (`<kbd>` styled element)
-- [ ] `src/components/ui/Tooltip.tsx` — simple tooltip on hover/focus
+- [x] `src/components/ui/Button.tsx` — variant: `primary | secondary | ghost | danger`, size: `sm | md`
+- [x] `src/components/ui/Badge.tsx` — color variants matching mode colors
+- [x] `src/components/ui/Kbd.tsx` — keyboard key display (`<kbd>` styled element)
+- [x] `src/components/ui/Tooltip.tsx` — simple tooltip on hover/focus
 
 ---
 
 ### T-13: Create `LessonPanel` Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-12, T-08
 **Reviewable by:** visual test — content renders, hint reveals on click, buttons work
 
 **File:** `src/components/lessons/LessonPanel.tsx`
-- [ ] Renders chapter badge, lesson title
-- [ ] Renders description paragraphs
-- [ ] Renders mission box (sticky/prominent)
-- [ ] Renders hint toggle button; hint text hidden until clicked
-- [ ] Renders Prev / Next navigation buttons (disabled when at boundaries)
-- [ ] Renders Reset button
-- [ ] Shows completion checkmark when lesson is complete
+- [x] Renders chapter badge, lesson title
+- [x] Renders description paragraphs
+- [x] Renders mission box (sticky/prominent)
+- [x] Renders hint toggle button; hint text hidden until clicked
+- [x] Renders Prev / Next navigation buttons (disabled when at boundaries)
+- [x] Renders Reset button
+- [x] Shows completion checkmark when lesson is complete
 
 ---
 
