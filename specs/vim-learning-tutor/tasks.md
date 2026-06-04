@@ -579,5 +579,19 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 ---
 
 ### T-32: Keyboard Sound Effects (Optional)
-**Status:** `TODO`
+**Status:** `SKIPPED`
 - [ ] Subtle typewriter click sounds on keypress (with mute toggle)
+
+---
+
+### POST v1.0.6: SEO, PWA, and Performance Finalization
+**Status:** `DONE`
+- [x] Improve SEO metadata in index.html (title, description, robots, canonical, Open Graph, Twitter)
+- [x] Add structured JSON-LD data
+- [x] Add PWA manifest (`site.webmanifest`) and icons
+- [x] Add Apple/iOS metadata
+- [x] Create `robots.txt` and `sitemap.xml`
+- [x] Add lightweight service worker for App Shell caching (`sw.js`)
+- [x] Register service worker conditionally in production
+- [x] Keep Playwright tests passing and updated for metadata checks
+

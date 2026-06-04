@@ -8,3 +8,14 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+// Register service worker only in production
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Use the base URL provided by Vite (e.g. /vim-learning/)
+    const swUrl = import.meta.env.BASE_URL + 'sw.js';
+    navigator.serviceWorker.register(swUrl).catch((err) => {
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}

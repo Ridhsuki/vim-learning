@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ridhsuki.github.io/vim-learning/sitemap.xml

@@ -5,7 +5,14 @@ test.describe('VimTutor E2E', () => {
     await page.goto('/');
   });
 
-  test('app loads and shows main components', async ({ page }) => {
+  test('app loads, shows main components, and has correct metadata', async ({ page }) => {
+    // Check SEO metadata
+    await expect(page).toHaveTitle('VimTutor | Learn Vim in Your Browser');
+    const manifestUrl = await page.getAttribute('link[rel="manifest"]', 'href');
+    expect(manifestUrl).toBe('/vim-learning/site.webmanifest');
+
+    // Check main components
+    await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.getByText('VimTutor', { exact: true })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Lesson roadmap' })).toBeVisible();
     await expect(page.getByRole('article')).toBeVisible(); // LessonPanel
