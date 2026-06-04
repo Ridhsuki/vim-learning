@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { lessons, firstLesson, totalLessons } from '../data/lessons';
 import type { AppProgress, Lesson, LessonProgress } from '../types/lesson';
 import {
@@ -25,13 +25,22 @@ function findLessonById(id: string): Lesson {
 /** Resolve stored progress: validate it, fall back to fresh if needed. */
 function resolveInitialProgress(): AppProgress {
   const stored = loadProgress();
-  if (!stored) return createInitialProgress();
-  // If the stored currentLessonId doesn't match any lesson, reset it.
-  const lessonExists = lessons.some((l) => l.id === stored.currentLessonId);
-  if (!lessonExists) {
-    return { ...stored, currentLessonId: firstLesson.id };
+  const baseProgress = stored || createInitialProgress();
+
+  // If a valid hash is present on load, it takes precedence
+  if (typeof window !== 'undefined' && window.location.hash) {
+    const hashId = window.location.hash.slice(1);
+    if (lessons.some((l) => l.id === hashId)) {
+      return { ...baseProgress, currentLessonId: hashId };
+    }
   }
-  return stored;
+
+  // Otherwise fallback to stored or first lesson
+  if (!lessons.some((l) => l.id === baseProgress.currentLessonId)) {
+    return { ...baseProgress, currentLessonId: firstLesson.id };
+  }
+
+  return baseProgress;
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -43,6 +52,13 @@ export function useLessonProgress() {
   const commit = useCallback((next: AppProgress) => {
     setProgress(next);
     saveProgress(next);
+    
+    if (typeof window !== 'undefined') {
+      const hashId = window.location.hash.slice(1);
+      if (hashId !== next.currentLessonId) {
+        window.location.hash = next.currentLessonId;
+      }
+    }
   }, []);
 
   // ── Derived values ──────────────────────────────────────────────────────────
@@ -132,7 +148,55 @@ export function useLessonProgress() {
 
   const resetAll = useCallback(() => {
     clearProgress();
-    setProgress(createInitialProgress());
+    const fresh = createInitialProgress();
+    setProgress(fresh);
+    if (typeof window !== 'undefined') {
+      if (window.location.hash.slice(1) !== fresh.currentLessonId) {
+        window.location.hash = fresh.currentLessonId;
+      }
+    }
+  }, []);
+
+  // ── Sync with URL Hash ──────────────────────────────────────────────────────
+
+  useEffect(() => {
+    // Force hash on mount
+    if (typeof window !== 'undefined') {
+      const currentHash = window.location.hash.slice(1);
+      const initialId = resolveInitialProgress().currentLessonId;
+      if (currentHash !== initialId) {
+        window.history.replaceState(null, '', `#${initialId}`);
+      }
+    }
+
+    const handleHashChange = () => {
+      const hashId = window.location.hash.slice(1);
+
+      setProgress((prev) => {
+        // Fallback to first lesson if hash is empty or invalid
+        if (!hashId || !lessons.some((l) => l.id === hashId)) {
+          if (prev.currentLessonId !== firstLesson.id) {
+            const next = { ...prev, currentLessonId: firstLesson.id };
+            saveProgress(next);
+            window.history.replaceState(null, '', `#${firstLesson.id}`);
+            return next;
+          }
+          window.history.replaceState(null, '', `#${firstLesson.id}`);
+          return prev;
+        }
+
+        if (hashId !== prev.currentLessonId) {
+          const next = { ...prev, currentLessonId: hashId };
+          saveProgress(next);
+          return next;
+        }
+
+        return prev;
+      });
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   // ── Return ──────────────────────────────────────────────────────────────────

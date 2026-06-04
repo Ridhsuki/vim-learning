@@ -32,6 +32,7 @@ function storedProgressAt(lessonId: string): AppProgress {
 
 beforeEach(() => {
   localStorage.clear();
+  window.location.hash = '';
 });
 
 // ─── Tests ────────────────────────────────────────────────────────────────────

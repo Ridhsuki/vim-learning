@@ -53,6 +53,8 @@ npm install -D typescript @typescript-eslint/parser @typescript-eslint/eslint-pl
 
 ---
 
+
+
 ### T-03: Update `index.html`
 **Status:** `DONE`
 **Dependencies:** T-02
@@ -551,9 +553,14 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 ---
 
 ### T-29: URL-Based Deep Linking
-**Status:** `TODO`
-- [ ] Add URL hash routing (`#lesson-id`) for direct lesson links
-- [ ] Update `vite.config.ts` if needed
+**Status:** `DONE`
+- [x] Add URL hash routing (`#lesson-id`) for direct lesson links
+- [x] Read hash on load to set initial lesson
+- [x] Update hash when user selects a lesson (without full reload)
+- [x] Update hash on Previous / Next / Reset all
+- [x] Handle `hashchange` event (e.g. browser back/forward)
+- [x] Fallback to first lesson on invalid hash
+- [x] Add E2E tests for deep linking scenarios
 
 ---
 

@@ -84,4 +84,31 @@ test.describe('VimTutor E2E', () => {
     await page.getByRole('button', { name: /Normal Mode is Home/ }).click();
     await expect(page.getByText('✓ Complete')).toBeVisible();
   });
+
+  test('hash routing: opening deep link loads specific lesson', async ({ page }) => {
+    await page.goto('/#normal-mode');
+    await expect(page.getByRole('heading', { name: 'Normal Mode is Home Base' })).toBeVisible();
+  });
+
+  test('hash routing: clicking a lesson updates the URL hash', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: /Normal Mode is Home/ }).click();
+    await expect(page).toHaveURL(/.*#normal-mode/);
+  });
+
+  test('hash routing: browser back navigates to previous lesson', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'What is a Mode?' })).toBeVisible();
+
+    await page.getByRole('button', { name: /Normal Mode is Home/ }).click();
+    await expect(page.getByRole('heading', { name: 'Normal Mode is Home Base' })).toBeVisible();
+
+    await page.goBack();
+    await expect(page.getByRole('heading', { name: 'What is a Mode?' })).toBeVisible();
+  });
+
+  test('hash routing: invalid hash safely falls back to first lesson', async ({ page }) => {
+    await page.goto('/#invalid-lesson-id-12345');
+    await expect(page.getByRole('heading', { name: 'What is a Mode?' })).toBeVisible();
+  });
 });
