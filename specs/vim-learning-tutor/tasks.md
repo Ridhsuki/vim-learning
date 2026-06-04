@@ -542,11 +542,11 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 > These are not required for v1. Do not start until v1 is shipped.
 
 ### T-28: Playwright End-to-End Tests
-**Status:** `TODO`
-- [ ] Install Playwright
-- [ ] Write E2E test: complete Lesson 1 using real keyboard input
-- [ ] Write E2E test: progress persists after page reload
-- [ ] Write E2E test: all lessons are accessible via sidebar
+**Status:** `DONE`
+- [x] Install Playwright
+- [x] Write E2E test: complete Lesson 1 using real keyboard input
+- [x] Write E2E test: progress persists after page reload
+- [x] Write E2E test: all lessons are accessible via sidebar
 
 ---
 
