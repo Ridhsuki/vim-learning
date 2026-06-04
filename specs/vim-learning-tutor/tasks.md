@@ -595,3 +595,20 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 - [x] Register service worker conditionally in production
 - [x] Keep Playwright tests passing and updated for metadata checks
 
+---
+
+### POST v1.0.7: Public Repository Documentation and GitHub Community Files
+**Status:** `DONE`
+- [x] Rewrite `README.md` with full documentation, install guide, scripts, structure, and roadmap
+- [x] Add `LICENSE` (MIT, 2026, Ridhsuki)
+- [x] Add `CHANGELOG.md` covering v1.0.0 through v1.0.7
+- [x] Add `CONTRIBUTING.md` with branch naming, commit style, test commands, and PR guide
+- [x] Add `CODE_OF_CONDUCT.md` (Contributor Covenant summary)
+- [x] Add `SECURITY.md` (lightweight vulnerability reporting for static app)
+- [x] Add `.github/ISSUE_TEMPLATE/bug_report.yml`
+- [x] Add `.github/ISSUE_TEMPLATE/feature_request.yml`
+- [x] Add `.github/ISSUE_TEMPLATE/config.yml`
+- [x] Add `.github/PULL_REQUEST_TEMPLATE.md`
+- [x] Add `.github/dependabot.yml` (weekly npm updates, major-version ignores)
+
+

@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    ignore:
+      # Avoid auto-upgrading major versions of core libraries without review
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@codemirror/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@replit/codemirror-vim"
+        update-types: ["version-update:semver-major"]

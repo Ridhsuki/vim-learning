@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💡 Start a Discussion
+    url: https://github.com/Ridhsuki/vim-learning/discussions
+    about: For questions, ideas, or general feedback about VimTutor.
