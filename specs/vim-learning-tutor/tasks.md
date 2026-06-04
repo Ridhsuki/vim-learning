@@ -492,6 +492,36 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 
 ---
 
+### POST v1.0.3: Improve Responsive Layout and Scrollbar Polish
+**Status:** `DONE`
+**Dependencies:** T-27
+
+**Checklist:**
+- [x] Add custom scrollbar styling to `globals.css`
+- [x] Allow header content to wrap gracefully on small screens (`flex-wrap`)
+- [x] Ensure AppShell `main` and container body correctly stack `flex-col` on mobile, but switch to `lg:flex-row` on larger screens
+- [x] Set sensible max-height on `LessonPanel` on mobile (`max-h-[40vh]`) so it doesn't push the VimEditor out of view
+- [x] Maintain independent scroll boundaries (`overflow-y-auto`, `overflow-hidden`) for all panels
+- [x] Ensure all 90 tests pass and build succeeds
+
+---
+
+### POST v1.0.4: Replace Native Reset Confirmation with Custom Modal
+**Status:** `DONE`
+**Dependencies:** POST v1.0.3
+
+**Checklist:**
+- [x] Create reusable `src/components/ui/ConfirmDialog.tsx`
+- [x] Integrate custom modal into `AppShell.tsx`
+- [x] Remove native `window.confirm` calls
+- [x] Support canceling and Escape key to close the dialog
+- [x] Support confirm action to reset all progress
+- [x] Keep layout clean, strictly tailwind CSS
+- [x] Update `AppShell.test.tsx` to reflect new modal interactions
+- [x] Run lint, typecheck, test:run, and build successfully
+
+---
+
 ## Phase 8: Stretch Goals (Post v1)
 
 > These are not required for v1. Do not start until v1 is shipped.

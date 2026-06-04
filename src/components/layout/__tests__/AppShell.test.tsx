@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { AppShell } from '../AppShell';
 import type { Lesson } from '../../../types/lesson';
 
@@ -17,15 +17,6 @@ const mockLesson: Lesson = {
 };
 
 describe('AppShell', () => {
-  let confirmSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    confirmSpy = vi.spyOn(window, 'confirm');
-  });
-
-  afterEach(() => {
-    confirmSpy.mockRestore();
-  });
 
   function renderAppShell(onResetAllProgress = vi.fn()) {
     render(
@@ -57,27 +48,56 @@ describe('AppShell', () => {
     expect(screen.getByRole('button', { name: 'Reset all lesson progress' })).toBeInTheDocument();
   });
 
-  it('calls onResetAllProgress when window.confirm returns true', async () => {
-    confirmSpy.mockReturnValue(true);
-    const onResetAllProgress = vi.fn();
-    renderAppShell(onResetAllProgress);
-
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: 'Reset all lesson progress' }));
-
-    expect(confirmSpy).toHaveBeenCalledWith('Are you sure you want to reset all your lesson progress? This cannot be undone.');
-    expect(onResetAllProgress).toHaveBeenCalledOnce();
+  it('does not render the dialog initially', () => {
+    renderAppShell();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
 
-  it('does not call onResetAllProgress when window.confirm returns false', async () => {
-    confirmSpy.mockReturnValue(false);
+  it('opens the custom dialog when reset button is clicked', async () => {
+    renderAppShell();
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: 'Reset all lesson progress' }));
+
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+    expect(screen.getByText('Reset all progress?')).toBeInTheDocument();
+  });
+
+  it('calls onResetAllProgress when Reset progress is clicked', async () => {
     const onResetAllProgress = vi.fn();
     renderAppShell(onResetAllProgress);
 
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: 'Reset all lesson progress' }));
+    await user.click(screen.getByRole('button', { name: 'Reset progress' }));
 
-    expect(confirmSpy).toHaveBeenCalledWith('Are you sure you want to reset all your lesson progress? This cannot be undone.');
+    expect(onResetAllProgress).toHaveBeenCalledOnce();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+  });
+
+  it('does not call onResetAllProgress when Keep progress is clicked', async () => {
+    const onResetAllProgress = vi.fn();
+    renderAppShell(onResetAllProgress);
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: 'Reset all lesson progress' }));
+    await user.click(screen.getByRole('button', { name: 'Keep progress' }));
+
+    expect(onResetAllProgress).not.toHaveBeenCalled();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+  });
+
+  it('closes the dialog when Escape is pressed', async () => {
+    const onResetAllProgress = vi.fn();
+    renderAppShell(onResetAllProgress);
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: 'Reset all lesson progress' }));
+    
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+    
+    await user.keyboard('{Escape}');
+    
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(onResetAllProgress).not.toHaveBeenCalled();
   });
 });

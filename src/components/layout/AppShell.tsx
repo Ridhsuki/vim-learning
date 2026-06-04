@@ -16,6 +16,7 @@
  * APIs, no lesson data imports, no validation logic.
  */
 
+import { useState } from 'react';
 import type { Lesson, LessonProgress, VimMode } from '../../types/lesson';
 import { VimEditor } from '../editor/VimEditor';
 import { LessonPanel } from '../lessons/LessonPanel';
@@ -23,6 +24,7 @@ import { LessonList } from '../lessons/LessonList';
 import { ProgressBar } from '../progress/ProgressBar';
 import { StatusBar } from './StatusBar';
 import { Button } from '../ui/Button';
+import { ConfirmDialog } from '../ui/ConfirmDialog';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -79,17 +81,26 @@ export function AppShell({
     'flex flex-col h-svh min-h-0 overflow-hidden bg-[#0d1117] text-[#e6edf3]';
   const containerClass = className ? `${base} ${className}` : base;
 
+  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+
   const handleResetAllClick = () => {
-    if (window.confirm('Are you sure you want to reset all your lesson progress? This cannot be undone.')) {
-      onResetAllProgress();
-    }
+    setIsResetDialogOpen(true);
+  };
+
+  const handleConfirmReset = () => {
+    onResetAllProgress();
+    setIsResetDialogOpen(false);
+  };
+
+  const handleCancelReset = () => {
+    setIsResetDialogOpen(false);
   };
 
   return (
     <div className={containerClass}>
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="shrink-0 flex items-center gap-4 px-4 py-2.5 border-b border-[#30363d] bg-[#161b22]">
+      <header className="shrink-0 flex flex-wrap items-center gap-4 px-4 py-2.5 border-b border-[#30363d] bg-[#161b22]">
         {/* Brand */}
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-base font-bold font-mono text-[#e6edf3] tracking-tight">
@@ -117,7 +128,7 @@ export function AppShell({
       </header>
 
       {/* ── Body (sidebar + main) ────────────────────────────────────────── */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
+      <div className="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
 
         {/* ── Sidebar: lesson roadmap ───────────────────────────────────── */}
         <aside
@@ -157,7 +168,7 @@ export function AppShell({
             onReset={onResetLesson}
             onUseHint={onUseHint}
             onCheckMission={onCheckMission}
-            className="shrink-0 lg:w-80 xl:w-96 lg:border-r lg:border-[#30363d] overflow-y-auto"
+            className="shrink-0 lg:w-80 xl:w-96 lg:border-r lg:border-[#30363d] border-b lg:border-b-0 border-[#30363d] max-h-[40vh] lg:max-h-none overflow-y-auto"
           />
 
           {/* Vim editor — takes remaining space */}
@@ -182,6 +193,18 @@ export function AppShell({
         lessonTitle={currentLesson.title}
         lessonIndex={currentLessonIndex}
         totalLessons={totalLessons}
+      />
+
+      {/* ── Modals ─────────────────────────────────────────────────────────── */}
+      <ConfirmDialog
+        open={isResetDialogOpen}
+        title="Reset all progress?"
+        description="This will clear all completed lessons, hints, and saved progress. You will return to the first lesson. This action cannot be undone."
+        confirmLabel="Reset progress"
+        cancelLabel="Keep progress"
+        variant="danger"
+        onConfirm={handleConfirmReset}
+        onCancel={handleCancelReset}
       />
     </div>
   );
