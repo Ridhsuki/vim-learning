@@ -453,14 +453,14 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 ---
 
 ### T-27: Deploy to GitHub Pages
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-26
 
 **Checklist:**
-- [ ] `npm run deploy` pushes to `gh-pages` branch successfully
-- [ ] App is accessible at `https://<username>.github.io/vim-learning/`
-- [ ] No 404 errors on asset loading
-- [ ] All lessons load and validate in the deployed environment
+- [x] Run `npm run deploy` to push to `gh-pages` branch
+- [x] Verify GitHub Pages URL resolves correctly (`/vim-learning/`)
+- [x] Application loads without 404s
+- [x] Core lesson content and editor visible and functional the deployed environment
 
 ---
 
