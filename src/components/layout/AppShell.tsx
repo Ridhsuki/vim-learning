@@ -154,7 +154,7 @@ export function AppShell({
         {/* ── Main content: LessonPanel + VimEditor ────────────────────── */}
         <main
           aria-label="Lesson content and editor"
-          className="flex flex-1 min-w-0 min-h-0 flex-col lg:flex-row overflow-hidden"
+          className="flex flex-1 min-w-0 min-h-0 flex-col lg:grid lg:grid-cols-[minmax(22rem,1fr)_minmax(0,50vw)] overflow-hidden"
         >
           {/* Lesson panel */}
           <LessonPanel
@@ -168,7 +168,7 @@ export function AppShell({
             onReset={onResetLesson}
             onUseHint={onUseHint}
             onCheckMission={onCheckMission}
-            className="shrink-0 lg:w-80 xl:w-96 lg:border-r lg:border-[#30363d] border-b lg:border-b-0 border-[#30363d] max-h-[40vh] lg:max-h-none overflow-y-auto"
+            className="min-w-0 lg:border-r lg:border-[#30363d] border-b lg:border-b-0 border-[#30363d] max-h-[40vh] lg:max-h-none overflow-y-auto overflow-x-hidden"
           />
 
           {/* Vim editor — takes remaining space */}
@@ -182,7 +182,7 @@ export function AppShell({
             initialContent={currentLesson.initialContent}
             onContentChange={onEditorContentChange}
             onModeChange={onEditorModeChange}
-            className="flex-1 min-h-0 rounded-none border-0 shadow-none"
+            className="flex-1 min-w-0 min-h-0 rounded-none border-0 shadow-none"
           />
         </main>
       </div>

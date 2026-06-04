@@ -522,6 +522,21 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 
 ---
 
+### POST v1.0.5: Refine Desktop Column Balance and Fix LessonPanel Horizontal Overflow
+**Status:** `DONE`
+**Dependencies:** POST v1.0.4
+
+**Checklist:**
+- [x] Change `AppShell.tsx` main content layout to use a CSS Grid on desktop (`lg:grid lg:grid-cols-[minmax(22rem,1fr)_minmax(0,50vw)]`)
+- [x] Remove fixed width constraint from `LessonPanel` component call
+- [x] Add safe horizontal overflow control classes to `LessonPanel` (`min-w-0 max-w-full overflow-x-hidden`)
+- [x] Force text wrapping on title, description, mission, and hint elements (`break-words whitespace-normal`)
+- [x] Maintain independent vertical scrolling
+- [x] Verify no regressions in mobile stacking layout
+- [x] Run lint, typecheck, test:run, and build successfully
+
+---
+
 ## Phase 8: Stretch Goals (Post v1)
 
 > These are not required for v1. Do not start until v1 is shipped.

@@ -69,7 +69,7 @@ export function LessonPanel({
   // ── Layout ──────────────────────────────────────────────────────────────────
 
   const base =
-    'flex flex-col gap-6 p-6 text-[#e6edf3] bg-[#0d1117] overflow-y-auto';
+    'flex flex-col gap-6 p-6 text-[#e6edf3] bg-[#0d1117] overflow-y-auto overflow-x-hidden min-w-0 max-w-full';
   const containerClass = className ? `${base} ${className}` : base;
 
   return (
@@ -94,7 +94,7 @@ export function LessonPanel({
           )}
         </div>
 
-        <h2 className="text-xl font-semibold text-[#e6edf3] leading-tight m-0">
+        <h2 className="text-xl font-semibold text-[#e6edf3] leading-tight m-0 break-words whitespace-normal">
           {lesson.title}
         </h2>
       </header>
@@ -102,7 +102,7 @@ export function LessonPanel({
       {/* ── Description paragraphs ── */}
       <section aria-label="Lesson description" className="flex flex-col gap-3">
         {lesson.description.map((para, i) => (
-          <p key={i} className="text-sm text-[#8b949e] leading-relaxed m-0">
+          <p key={i} className="text-sm text-[#8b949e] leading-relaxed m-0 break-words whitespace-normal">
             {para}
           </p>
         ))}
@@ -126,7 +126,7 @@ export function LessonPanel({
             <span className="text-[#3fb950] text-xs" aria-hidden="true">✓</span>
           )}
         </div>
-        <p className="text-sm text-[#e6edf3] leading-relaxed m-0 font-medium">
+        <p className="text-sm text-[#e6edf3] leading-relaxed m-0 font-medium break-words whitespace-normal">
           {lesson.mission}
         </p>
       </section>
@@ -139,7 +139,7 @@ export function LessonPanel({
               <p className="text-xs font-semibold font-mono tracking-widest uppercase text-[#ffa657] mb-1">
                 Hint
               </p>
-              <p className="text-sm text-[#e6edf3] leading-relaxed m-0">
+              <p className="text-sm text-[#e6edf3] leading-relaxed m-0 break-words whitespace-normal">
                 {lesson.hint}
               </p>
             </div>
@@ -158,7 +158,7 @@ export function LessonPanel({
       )}
 
       {/* ── Key reminder ── */}
-      <section aria-label="Key reminders" className="flex items-center gap-1.5 flex-wrap">
+      <section aria-label="Key reminders" className="flex items-center gap-1.5 flex-wrap min-w-0 max-w-full">
         <span className="text-xs text-[#8b949e]">Useful keys:</span>
         <Kbd>Esc</Kbd>
         <span className="text-xs text-[#8b949e]">normal mode</span>
@@ -171,7 +171,7 @@ export function LessonPanel({
       </section>
 
       {/* ── Navigation + Reset ── */}
-      <footer className="flex items-center gap-2 flex-wrap mt-auto pt-2 border-t border-[#30363d]">
+      <footer className="flex items-center gap-2 flex-wrap mt-auto pt-2 border-t border-[#30363d] min-w-0 max-w-full">
         {/* Previous */}
         <Tooltip
           content={isFirstLesson ? 'Already at the first lesson' : 'Go to previous lesson'}
