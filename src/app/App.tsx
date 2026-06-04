@@ -54,6 +54,19 @@ export default function App() {
 
   const [currentMode, setCurrentMode] = useState<VimMode>('normal');
   const [editorResetKey, setEditorResetKey] = useState(0);
+  const [lastCommand, setLastCommand] = useState<string | null>(null);
+  const [commandStatus, setCommandStatus] = useState<string | null>(null);
+  
+  const statusTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (statusTimeoutRef.current) {
+        clearTimeout(statusTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // ── Stable refs for use inside callbacks ───────────────────────────────────
   //
@@ -140,6 +153,31 @@ export default function App() {
     );
   }, [runValidation]);
 
+  const handleWriteCommand = useCallback(() => {
+    setLastCommand(':w');
+
+    if (statusTimeoutRef.current) {
+      clearTimeout(statusTimeoutRef.current);
+    }
+
+    const lesson = currentLessonRef.current;
+    const isCompleted = progress.lessons[lesson.id]?.completed;
+
+    if (isCompleted) {
+      setCommandStatus('Already saved');
+    } else if (lesson.validation.trigger === 'manual') {
+      handleManualValidation();
+      setCommandStatus('Saved lesson');
+    } else {
+      setCommandStatus('Command recorded');
+    }
+
+    statusTimeoutRef.current = setTimeout(() => {
+      setCommandStatus(null);
+      statusTimeoutRef.current = null;
+    }, 3000);
+  }, [handleManualValidation, progress.lessons]);
+
   // ── Lesson reset (current lesson only) ────────────────────────────────────
   //
   // Increments editorResetKey so AppShell passes a new key to VimEditor,
@@ -208,6 +246,10 @@ export default function App() {
       onCheckMission={handleManualValidation}
       onEditorContentChange={handleEditorContentChange}
       onEditorModeChange={handleEditorModeChange}
+      onWriteCommand={handleWriteCommand}
+      lastCommand={lastCommand}
+      commandStatus={commandStatus}
+      className="min-h-svh"
     />
   );
 }

@@ -565,9 +565,9 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 ---
 
 ### T-30: Command History / Ex Commands
-**Status:** `TODO`
-- [ ] Display last Vim ex command in status bar
-- [ ] Teach `:w` as a "save" metaphor for lesson completion
+**Status:** `DONE`
+- [x] Display last Vim ex command in status bar
+- [x] Teach `:w` as a "save" metaphor for lesson completion
 
 ---
 

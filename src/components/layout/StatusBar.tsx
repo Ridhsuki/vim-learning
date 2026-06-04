@@ -24,6 +24,8 @@ export interface StatusBarProps {
   lessonIndex: number;
   totalLessons: number;
   cursorPosition?: CursorPosition;
+  lastCommand?: string | null;
+  commandStatus?: string | null;
   className?: string;
 }
 
@@ -58,6 +60,8 @@ export function StatusBar({
   lessonIndex,
   totalLessons,
   cursorPosition,
+  lastCommand,
+  commandStatus,
   className,
 }: StatusBarProps) {
   const base =
@@ -79,6 +83,20 @@ export function StatusBar({
         <span className="hidden sm:inline text-[#8b949e]">
           {formatModeLabel(mode)}
         </span>
+      </div>
+
+      {/* ── Center: Command Feedback ── */}
+      <div className="flex-1 flex justify-center items-center gap-3 min-w-0 overflow-hidden">
+        {lastCommand && (
+          <span className="truncate text-[#8b949e]">
+            Last command: {lastCommand}
+          </span>
+        )}
+        {commandStatus && (
+          <span className="truncate font-semibold text-[#56d364]">
+            {commandStatus}
+          </span>
+        )}
       </div>
 
       {/* ── Right: lesson progress + title + cursor ── */}

@@ -38,12 +38,25 @@ import type { CodeMirrorV } from '@replit/codemirror-vim';
 // ── Project types ────────────────────────────────────────────────────────────
 import type { VimMode } from '../types/lesson';
 
+// ── Global Vim Config ─────────────────────────────────────────────────────────
+
+// Define :w / :write command to dispatch a custom event to the active editor DOM
+Vim.defineEx('write', 'w', (cm) => {
+  // The underlying EditorView is exposed as cm6
+  // We dispatch an event so the React hook can pick it up
+  const view = (cm as CodeMirrorV & { cm6?: EditorView }).cm6;
+  if (view && view.dom) {
+    view.dom.dispatchEvent(new CustomEvent('vim-command-write'));
+  }
+});
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface UseVimEditorOptions {
   initialContent: string;
   onContentChange?: (content: string) => void;
   onModeChange?: (mode: VimMode) => void;
+  onWriteCommand?: () => void;
 }
 
 /**
@@ -102,12 +115,16 @@ export function useVimEditor(options: UseVimEditorOptions) {
   // Stable refs for the callbacks so they never cause the effect to re-run.
   const onContentChangeRef = useRef(onContentChange);
   const onModeChangeRef = useRef(onModeChange);
+  const onWriteCommandRef = useRef(options.onWriteCommand);
   useEffect(() => {
     onContentChangeRef.current = onContentChange;
   }, [onContentChange]);
   useEffect(() => {
     onModeChangeRef.current = onModeChange;
   }, [onModeChange]);
+  useEffect(() => {
+    onWriteCommandRef.current = options.onWriteCommand;
+  }, [options.onWriteCommand]);
 
   // DOM ref that the consumer attaches to a container <div>.
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -174,42 +191,31 @@ export function useVimEditor(options: UseVimEditorOptions) {
     viewRef.current = view;
 
     // ── Mode tracking via vim-mode-change ──────────────────────────────────
-    //
-    // @replit/codemirror-vim emits 'vim-mode-change' on the internal CM5
-    // adapter instance whenever the Vim mode transitions.  getCM() retrieves
-    // that adapter from the EditorView.
-    //
-    // The CM5 adapter's `on` method accepts a string event name and a callback.
-    // The library's type declarations type the second argument as `Function` (via
-    // the `on(type: string, f: Function): void` signature).  We use a narrow
-    // local cast rather than a broad `any` to keep things auditable.
-    //
-    // TODO (T-10): if this listener proves insufficient (e.g. mode not reported
-    // on certain commands), augment tracking using a ViewPlugin that reads
-    // `view.state.field(vimStateField)` if the field becomes publicly exported
-    // in a future library release.
-
     const cm = getCM(view);
+    
+    const handleWriteCommand = () => {
+      onWriteCommandRef.current?.();
+    };
+    view.dom.addEventListener('vim-command-write', handleWriteCommand);
+
     if (cm !== null) {
       const handleModeChange = (event: VimModeChangeEvent) => {
         const mode = toVimMode(event.mode, event.subMode);
         setCurrentMode(mode);
         onModeChangeRef.current?.(mode);
       };
-      // The library uses `Function` for the handler type; we pass a typed
-      // function and the runtime call will receive the right payload.
       cm.on('vim-mode-change', handleModeChange as unknown as () => void);
 
-      // Cleanup: remove listener before destroying the view.
       return () => {
         cm.off('vim-mode-change', handleModeChange as unknown as () => void);
+        view.dom.removeEventListener('vim-command-write', handleWriteCommand);
         view.destroy();
         viewRef.current = null;
       };
     }
 
-    // Fallback cleanup if getCM returned null (should not happen in practice).
     return () => {
+      view.dom.removeEventListener('vim-command-write', handleWriteCommand);
       view.destroy();
       viewRef.current = null;
     };

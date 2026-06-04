@@ -49,6 +49,9 @@ export interface AppShellProps {
   onCheckMission?: () => void;
   onEditorContentChange: (content: string) => void;
   onEditorModeChange: (mode: VimMode) => void;
+  onWriteCommand?: () => void;
+  lastCommand?: string | null;
+  commandStatus?: string | null;
   className?: string;
 }
 
@@ -75,6 +78,9 @@ export function AppShell({
   onCheckMission,
   onEditorContentChange,
   onEditorModeChange,
+  onWriteCommand,
+  lastCommand,
+  commandStatus,
   className,
 }: AppShellProps) {
   const base =
@@ -182,6 +188,7 @@ export function AppShell({
             initialContent={currentLesson.initialContent}
             onContentChange={onEditorContentChange}
             onModeChange={onEditorModeChange}
+            onWriteCommand={onWriteCommand}
             className="flex-1 min-w-0 min-h-0 rounded-none border-0 shadow-none"
           />
         </main>
@@ -193,6 +200,8 @@ export function AppShell({
         lessonTitle={currentLesson.title}
         lessonIndex={currentLessonIndex}
         totalLessons={totalLessons}
+        lastCommand={lastCommand}
+        commandStatus={commandStatus}
       />
 
       {/* ── Modals ─────────────────────────────────────────────────────────── */}

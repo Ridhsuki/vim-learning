@@ -111,4 +111,50 @@ test.describe('VimTutor E2E', () => {
     await page.goto('/#invalid-lesson-id-12345');
     await expect(page.getByRole('heading', { name: 'What is a Mode?' })).toBeVisible();
   });
+
+  test('command history: :w saves lesson', async ({ page }) => {
+    await page.goto('/#normal-mode');
+    
+    // Ensure we are at Normal Mode lesson
+    await expect(page.getByRole('heading', { name: 'Normal Mode is Home Base' })).toBeVisible();
+
+    // Focus editor
+    await page.locator('.cm-content').click();
+
+    // Type the Vim command
+    await page.keyboard.press('Escape');
+    await page.keyboard.type(':w');
+    await page.keyboard.press('Enter');
+
+    // Verify status bar shows the command
+    await expect(page.getByText('Last command: :w')).toBeVisible();
+
+    // Verify lesson is marked complete
+    await expect(page.getByText('Saved lesson')).toBeVisible();
+    await expect(page.getByText('✓ Complete')).toBeVisible();
+  });
+
+  test('command history: :w shows Command recorded for non-manual lessons', async ({ page }) => {
+    await page.goto('/#modes-intro');
+    
+    // Ensure we are at the first lesson
+    await expect(page.getByRole('heading', { name: 'What is a Mode?' })).toBeVisible();
+
+    // Focus editor
+    await page.locator('.cm-content').click();
+
+    // Type the Vim command
+    await page.keyboard.press('Escape');
+    await page.keyboard.type(':w');
+    await page.keyboard.press('Enter');
+
+    // Verify status bar shows the command
+    await expect(page.getByText('Last command: :w')).toBeVisible();
+
+    // Verify status indicates recorded but not necessarily saved/completed
+    await expect(page.getByText('Command recorded')).toBeVisible();
+    
+    // It should not mark the lesson complete just because of :w
+    await expect(page.getByText('✓ Complete')).not.toBeVisible();
+  });
 });

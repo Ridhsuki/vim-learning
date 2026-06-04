@@ -32,6 +32,8 @@ export interface VimEditorProps {
   onContentChange?: (content: string) => void;
   /** Called immediately (no debounce) whenever the Vim mode transitions. */
   onModeChange?: (mode: VimMode) => void;
+  /** Called when the user runs the :w ex command. */
+  onWriteCommand?: () => void;
   /** Optional extra CSS class names merged onto the container div. */
   className?: string;
 }
@@ -42,6 +44,7 @@ export function VimEditor({
   initialContent,
   onContentChange,
   onModeChange,
+  onWriteCommand,
   className,
 }: VimEditorProps) {
   // ── Debounce plumbing ──────────────────────────────────────────────────────
@@ -84,11 +87,13 @@ export function VimEditor({
 
   // ── Editor hook ────────────────────────────────────────────────────────────
 
-  const { editorContainerRef, resetContent, focusEditor } = useVimEditor({
-    initialContent,
-    onContentChange: debouncedOnContentChange,
-    onModeChange,
-  });
+  const { editorContainerRef, resetContent, focusEditor } =
+    useVimEditor({
+      initialContent,
+      onContentChange: debouncedOnContentChange,
+      onModeChange,
+      onWriteCommand,
+    });
 
   // ── Focus on mount ─────────────────────────────────────────────────────────
   //
