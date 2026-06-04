@@ -478,6 +478,20 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 
 ---
 
+### POST v1.0.2: Add Reset All Progress Button
+**Status:** `DONE`
+**Dependencies:** T-27
+
+**Checklist:**
+- [x] Add `handleResetAllProgress` handler to `App.tsx` calling `resetAll()`
+- [x] Pass `onResetAllProgress` down to `AppShell.tsx`
+- [x] Render `Button` (variant `danger`, size `sm`) in header next to `ProgressBar`
+- [x] Require user confirmation via `window.confirm` before resetting
+- [x] Add component tests for button and confirm step
+- [x] Ensure all 90 tests pass and build succeeds
+
+---
+
 ## Phase 8: Stretch Goals (Post v1)
 
 > These are not required for v1. Do not start until v1 is shipped.

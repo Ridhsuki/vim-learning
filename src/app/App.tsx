@@ -162,6 +162,13 @@ export default function App() {
     setEditorResetKey((k) => k + 1);
   }, [resetAll]);
 
+  const handleResetAllProgress = useCallback(() => {
+    resetAll();
+    setCurrentMode('normal');
+    currentModeRef.current = 'normal';
+    setEditorResetKey((k) => k + 1);
+  }, [resetAll]);
+
   // ── Course completion guard ────────────────────────────────────────────────
 
   const isCourseComplete = totalLessons > 0 && completedCount >= totalLessons;
@@ -196,6 +203,7 @@ export default function App() {
       onPreviousLesson={navigatePrevious}
       onNextLesson={navigateNext}
       onResetLesson={handleResetLesson}
+      onResetAllProgress={handleResetAllProgress}
       onUseHint={useHint}
       onCheckMission={handleManualValidation}
       onEditorContentChange={handleEditorContentChange}

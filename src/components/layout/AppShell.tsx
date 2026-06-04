@@ -22,6 +22,7 @@ import { LessonPanel } from '../lessons/LessonPanel';
 import { LessonList } from '../lessons/LessonList';
 import { ProgressBar } from '../progress/ProgressBar';
 import { StatusBar } from './StatusBar';
+import { Button } from '../ui/Button';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -42,6 +43,7 @@ export interface AppShellProps {
   onNextLesson: () => void;
   onResetLesson: () => void;
   onUseHint: (lessonId: string) => void;
+  onResetAllProgress: () => void;
   onCheckMission?: () => void;
   onEditorContentChange: (content: string) => void;
   onEditorModeChange: (mode: VimMode) => void;
@@ -67,6 +69,7 @@ export function AppShell({
   onNextLesson,
   onResetLesson,
   onUseHint,
+  onResetAllProgress,
   onCheckMission,
   onEditorContentChange,
   onEditorModeChange,
@@ -75,6 +78,12 @@ export function AppShell({
   const base =
     'flex flex-col h-svh min-h-0 overflow-hidden bg-[#0d1117] text-[#e6edf3]';
   const containerClass = className ? `${base} ${className}` : base;
+
+  const handleResetAllClick = () => {
+    if (window.confirm('Are you sure you want to reset all your lesson progress? This cannot be undone.')) {
+      onResetAllProgress();
+    }
+  };
 
   return (
     <div className={containerClass}>
@@ -95,6 +104,16 @@ export function AppShell({
         <div className="flex-1 min-w-0 max-w-xs ml-auto">
           <ProgressBar completed={completedCount} total={totalLessons} />
         </div>
+
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={handleResetAllClick}
+          aria-label="Reset all lesson progress"
+          className="shrink-0"
+        >
+          Reset all progress
+        </Button>
       </header>
 
       {/* ── Body (sidebar + main) ────────────────────────────────────────── */}
