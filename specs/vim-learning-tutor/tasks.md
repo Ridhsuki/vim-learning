@@ -349,78 +349,106 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 ## Phase 6: Testing
 
 ### T-21: Configure Vitest
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-01, T-02
 **Reviewable by:** `npm test` runs without error (even with no test files)
 
 **Changes:**
-- [ ] Add `test` script to `package.json`: `"test": "vitest"`
-- [ ] Add `coverage` script: `"coverage": "vitest run --coverage"`
-- [ ] Configure `vite.config.ts` with `test: { environment: 'jsdom', setupFiles: [...] }`
-- [ ] Create `src/test/setup.ts` with `@testing-library/jest-dom` import
+- [x] Added `test`, `test:run`, and `coverage` scripts to `package.json`
+- [x] Switched `vite.config.ts` import to `vitest/config` and added `test: { environment: 'jsdom', setupFiles, globals: true }`
+- [x] Created `src/test/setup.ts` importing `@testing-library/jest-dom/vitest`
+- [x] Added `"types": ["vitest/globals"]` to `tsconfig.json` (jest-dom types excluded — requires @types/jest)
 
 ---
 
 ### T-22: Write Unit Tests — `storage.ts`
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-06, T-21
 
-**File:** `src/lib/__tests__/storage.test.ts`
-- [ ] `loadProgress` returns `null` when nothing stored
-- [ ] `saveProgress` then `loadProgress` returns same data
-- [ ] `clearProgress` makes `loadProgress` return `null`
-- [ ] `loadProgress` returns `null` when stored version mismatches
-- [ ] `loadProgress` handles JSON parse errors gracefully
+**File:** `src/lib/__tests__/storage.test.ts` — 13 tests, 13 passing
+- [x] `loadProgress` returns `null` when nothing stored
+- [x] `saveProgress` then `loadProgress` returns same data
+- [x] `clearProgress` makes `loadProgress` return `null`
+- [x] `loadProgress` returns `null` when stored version mismatches
+- [x] `loadProgress` handles JSON parse errors gracefully
+- [x] `loadProgress` returns `null` for all three missing-field shapes
+- [x] `loadProgress` returns `null` for stored primitive (non-object)
+- [x] All three functions handle localStorage throwing without propagating the error
+- [x] Also fixed: added `coverage` to `eslint.config.js` globalIgnores
 
 ---
 
 ### T-23: Write Unit Tests — `lessonValidation.ts`
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-07, T-21
 
-**File:** `src/lib/__tests__/lessonValidation.test.ts`
-- [ ] Returns `true` when content matches expected state
-- [ ] Returns `false` when content does not match
-- [ ] Works for each validation trigger type
+**File:** `src/lib/__tests__/lessonValidation.test.ts` — 18 tests, 18 passing
+- [x] `validateLesson` returns `true`/`false` based on check result
+- [x] `validateLesson` passes `content` and `mode` correctly to the check function
+- [x] `validateLesson` returns `false` when check throws (does not propagate)
+- [x] `validateLesson` does not mutate the lesson object
+- [x] `validateLesson` works with modes: `normal`, `insert`, `visual`
+- [x] `shouldValidate` returns `true` for each trigger type: `on-change`, `on-mode-change`, `manual`
+- [x] `shouldValidate` returns `false` when trigger does not match lesson trigger
+- [x] `shouldValidate` does not call the check function
+- [x] Combined integration test verifies the guard → validate flow
 
 ---
 
 ### T-24: Write Component Tests — `LessonPanel`
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-13, T-21
 
-**File:** `src/components/lessons/__tests__/LessonPanel.test.tsx`
-- [ ] Renders lesson title and description
-- [ ] Mission text is visible
-- [ ] Hint is hidden initially; visible after clicking hint button
-- [ ] Next button is disabled on last lesson
-- [ ] Prev button is disabled on first lesson
-- [ ] Reset button calls `onReset` callback
+**File:** `src/components/lessons/__tests__/LessonPanel.test.tsx` — 21 tests, 21 passing
+- [x] Renders lesson title and all description paragraphs
+- [x] Renders mission text and chapter badge
+- [x] Hint is hidden initially when `hintUsed` is false
+- [x] Hint text appears after clicking the hint button
+- [x] `onUseHint(lesson.id)` called when hint button clicked
+- [x] Hint shown immediately and button hidden when `hintUsed` is true
+- [x] No hint button or text when lesson has no hint
+- [x] Previous button disabled when `isFirstLesson` is true, enabled otherwise
+- [x] Next button disabled when `isLastLesson` is true, enabled otherwise
+- [x] `onPrevious` called on click, not called when disabled
+- [x] `onNext` called on click, not called when disabled
+- [x] Reset button calls `onReset` callback
+- [x] Completion badge shown when `isCompleted` is true, hidden otherwise
 
 ---
 
 ### T-25: Write Component Tests — `useLessonProgress`
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-08, T-21
 
-**File:** `src/hooks/__tests__/useLessonProgress.test.ts`
-- [ ] Starts at first lesson with empty progress
-- [ ] `markComplete` updates progress and persists to storage
-- [ ] `navigateTo` changes current lesson
-- [ ] `resetAll` clears progress and returns to lesson 1
+**File:** `src/hooks/__tests__/useLessonProgress.test.ts` — 31 tests, 31 passing
+- [x] Starts at first lesson with empty progress; correct initial counts and flags
+- [x] `navigateTo(id)` changes lesson for valid id; ignores unknown ids
+- [x] `navigateNext()` / `navigatePrevious()` move through lessons; clamp at boundaries
+- [x] `isFirstLesson` / `isLastLesson` update correctly after navigation
+- [x] `markComplete(id)` sets `completed: true`, increments `completedCount`
+- [x] `markComplete(id)` persists to localStorage (verified via `loadProgress()`)
+- [x] `markComplete(id)` preserves existing `completedAt` on re-completion
+- [x] `useHint(id)` sets `hintUsed: true`; persists; preserves completed state
+- [x] `resetAll()` clears completedCount, resets to first lesson, clears localStorage
+- [x] Restores current lesson and completedCount from localStorage on mount
+- [x] Falls back to first lesson when stored `currentLessonId` does not exist in lessons
 
 ---
 
 ## Phase 7: Deployment & Quality Gate
 
 ### T-26: Final Lint & Build Verification
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** All prior tasks
 
 **Checklist:**
-- [ ] `npm run lint` passes with zero errors
-- [ ] `npm run build` succeeds
-- [ ] `dist/` output is correct (check `index.html` asset paths have `/vim-learning/` prefix)
+- [x] `npm run lint` passes with zero errors and zero warnings
+- [x] `npm run typecheck` passes with zero errors
+- [x] `npm run test:run` passes — 83 tests in 4 files, all passing
+- [x] `npm run build` succeeds — 47 modules, 660 kB JS / 24.74 kB CSS
+- [x] `dist/index.html` exists with correct `/vim-learning/` asset prefix on both JS and CSS
+- [x] No `src/` references in `dist/index.html`
+- [x] `node_modules/`, `dist/`, and `coverage/` are all gitignored (not tracked)
 
 ---
 

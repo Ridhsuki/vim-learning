@@ -8,6 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run --passWithNoTests",
+    "coverage": "vitest run --coverage --passWithNoTests",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"

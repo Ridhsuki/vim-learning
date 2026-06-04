@@ -27,6 +27,10 @@
     /* Output — Vite handles the actual emit; tsc is type-check only */
     "noEmit": true,
 
+    /* Vitest globals — provides describe, it, expect, etc. as ambient types.
+       jest-dom matchers are loaded via src/test/setup.ts at runtime. */
+    "types": ["vitest/globals"]
+
     /* Path aliases are added in a later task when imports require them */
   },
   "include": ["src"],

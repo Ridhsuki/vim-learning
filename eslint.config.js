@@ -7,7 +7,8 @@ import tsPlugin from '@typescript-eslint/eslint-plugin'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'coverage']),
+
 
   // ── JavaScript & JSX (existing files) ───────────────────────────
   {
