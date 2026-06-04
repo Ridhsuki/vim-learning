@@ -1,0 +1,29 @@
+{
+  "name": "VimTutor",
+  "short_name": "VimTutor",
+  "description": "Interactive browser-based Vim learning playground with guided lessons.",
+  "id": "/vim-learning/",
+  "start_url": "/vim-learning/",
+  "scope": "/vim-learning/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    {
+      "src": "/vim-learning/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/vim-learning/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/vim-learning/icons/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
