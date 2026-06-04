@@ -56,8 +56,8 @@ The status bar below will confirm your mode.
   mission: 'Press Escape to make sure you are in Normal mode. The status bar should show NORMAL.',
   hint: 'Press the Escape key. Look at the status bar at the bottom of the editor.',
   validation: {
-    trigger: 'on-mode-change',
-    check: (_content, mode) => mode === 'normal',
+    trigger: 'manual',
+    check: () => true,
   },
 };
 
@@ -125,9 +125,9 @@ const insertO: Lesson = {
     'This saves you from pressing End, Enter, and then i. It is one of the most useful Insert mode shortcuts.',
   ],
   initialContent: `Line 1: First line
-Line 2: Third line
+Line 3: Third line
 
-There is a missing line between Line 1 and Line 2.
+There is a missing line between Line 1 and Line 3.
 Place your cursor on Line 1 and press 'o' to add it.
 `,
   mission: "Place your cursor on \"Line 1\" and press o to open a new line below it. Type \"Line 2: Second line\".",
@@ -194,8 +194,8 @@ Move your cursor onto it using only h j k l.
   // Full cursor-position validation requires CodeMirror state (added in T-09).
   // For now we accept any navigation attempt (mode remains normal).
   validation: {
-    trigger: 'on-mode-change',
-    check: (_content, mode) => mode === 'normal',
+    trigger: 'manual',
+    check: () => true,
   },
 };
 
@@ -225,8 +225,8 @@ Use e to land on the last character of each word.
   mission: 'Use w to jump forward three words, then use b to jump back one word. Stay in Normal mode throughout.',
   hint: 'Press w three times, then press b once. You should land on "brown".',
   validation: {
-    trigger: 'on-mode-change',
-    check: (_content, mode) => mode === 'normal',
+    trigger: 'manual',
+    check: () => true,
   },
 };
 
@@ -257,8 +257,8 @@ Practice:
   mission: 'On the first indented line, press 0 to go to column 1, then ^ to jump to the first real character, then $ to jump to the end.',
   hint: '0 goes to column 1 (before the spaces). ^ skips whitespace and lands on "T". $ goes to the period at the end.',
   validation: {
-    trigger: 'on-mode-change',
-    check: (_content, mode) => mode === 'normal',
+    trigger: 'manual',
+    check: () => true,
   },
 };
 
@@ -291,8 +291,8 @@ Line 10: This is the bottom of the file. ← G lands here.
   mission: 'Press G to jump to the last line, then press gg to jump back to the first line.',
   hint: 'Press G (Shift+g) to go to the bottom, then press g g (two lowercase g keys) to go back to the top.',
   validation: {
-    trigger: 'on-mode-change',
-    check: (_content, mode) => mode === 'normal',
+    trigger: 'manual',
+    check: () => true,
   },
 };
 
@@ -510,9 +510,8 @@ Press * while on "cherry" to search for it directly.
   mission: 'Press / then type "cherry" and press Enter to search for it. Then press n to jump to the next occurrence.',
   hint: 'Press / on your keyboard, type cherry, press Enter, then press n to jump to the next match.',
   validation: {
-    trigger: 'on-mode-change',
-    // Search lands back in normal mode after pressing Enter or n.
-    check: (_content, mode) => mode === 'normal',
+    trigger: 'manual',
+    check: () => true,
   },
 };
 

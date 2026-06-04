@@ -42,6 +42,7 @@ export interface AppShellProps {
   onNextLesson: () => void;
   onResetLesson: () => void;
   onUseHint: (lessonId: string) => void;
+  onCheckMission?: () => void;
   onEditorContentChange: (content: string) => void;
   onEditorModeChange: (mode: VimMode) => void;
   className?: string;
@@ -66,6 +67,7 @@ export function AppShell({
   onNextLesson,
   onResetLesson,
   onUseHint,
+  onCheckMission,
   onEditorContentChange,
   onEditorModeChange,
   className,
@@ -135,6 +137,7 @@ export function AppShell({
             onNext={onNextLesson}
             onReset={onResetLesson}
             onUseHint={onUseHint}
+            onCheckMission={onCheckMission}
             className="shrink-0 lg:w-80 xl:w-96 lg:border-r lg:border-[#30363d] overflow-y-auto"
           />
 

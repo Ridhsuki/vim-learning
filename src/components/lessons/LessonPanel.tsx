@@ -27,6 +27,7 @@ export interface LessonPanelProps {
   onNext: () => void;
   onReset: () => void;
   onUseHint: (lessonId: string) => void;
+  onCheckMission?: () => void;
   className?: string;
 }
 
@@ -42,6 +43,7 @@ export function LessonPanel({
   onNext,
   onReset,
   onUseHint,
+  onCheckMission,
   className,
 }: LessonPanelProps) {
   // ── Hint visibility ─────────────────────────────────────────────────────────
@@ -199,6 +201,18 @@ export function LessonPanel({
             Next →
           </Button>
         </Tooltip>
+
+        {/* Check Mission (for manual triggers only) */}
+        {lesson.validation.trigger === 'manual' && !isCompleted && onCheckMission && (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={onCheckMission}
+            aria-label="Mark this manual mission as completed"
+          >
+            I completed this mission
+          </Button>
+        )}
 
         {/* Spacer */}
         <span className="flex-1" />

@@ -224,4 +224,36 @@ describe('LessonPanel', () => {
       expect(screen.queryByLabelText('Lesson complete')).not.toBeInTheDocument();
     });
   });
+
+  // ── Manual completion ────────────────────────────────────────────────────────
+
+  describe('manual completion', () => {
+    it('renders the manual completion button when trigger is manual and isCompleted is false', () => {
+      const manualLesson: Lesson = { ...lesson, validation: { trigger: 'manual', check: () => true } };
+      renderLessonPanel({ lesson: manualLesson, isCompleted: false, onCheckMission: vi.fn() });
+      expect(screen.getByRole('button', { name: /mark this manual mission as completed/i })).toBeInTheDocument();
+    });
+
+    it('calls onCheckMission when the manual completion button is clicked', async () => {
+      const manualLesson: Lesson = { ...lesson, validation: { trigger: 'manual', check: () => true } };
+      const onCheckMission = vi.fn();
+      const user = userEvent.setup();
+      renderLessonPanel({ lesson: manualLesson, isCompleted: false, onCheckMission });
+      
+      await user.click(screen.getByRole('button', { name: /mark this manual mission as completed/i }));
+      expect(onCheckMission).toHaveBeenCalledOnce();
+    });
+
+    it('does not render the manual completion button when trigger is not manual', () => {
+      const autoLesson: Lesson = { ...lesson, validation: { trigger: 'on-change', check: () => true } };
+      renderLessonPanel({ lesson: autoLesson, isCompleted: false, onCheckMission: vi.fn() });
+      expect(screen.queryByRole('button', { name: /mark this manual mission as completed/i })).not.toBeInTheDocument();
+    });
+
+    it('does not render the manual completion button when the lesson is already completed', () => {
+      const manualLesson: Lesson = { ...lesson, validation: { trigger: 'manual', check: () => true } };
+      renderLessonPanel({ lesson: manualLesson, isCompleted: true, onCheckMission: vi.fn() });
+      expect(screen.queryByRole('button', { name: /mark this manual mission as completed/i })).not.toBeInTheDocument();
+    });
+  });
 });

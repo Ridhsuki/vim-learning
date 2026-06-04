@@ -131,6 +131,15 @@ export default function App() {
     [runValidation],
   );
 
+  const handleManualValidation = useCallback(() => {
+    runValidation(
+      currentLessonRef.current,
+      editorContentRef.current,
+      currentModeRef.current,
+      'manual',
+    );
+  }, [runValidation]);
+
   // ── Lesson reset (current lesson only) ────────────────────────────────────
   //
   // Increments editorResetKey so AppShell passes a new key to VimEditor,
@@ -188,6 +197,7 @@ export default function App() {
       onNextLesson={navigateNext}
       onResetLesson={handleResetLesson}
       onUseHint={useHint}
+      onCheckMission={handleManualValidation}
       onEditorContentChange={handleEditorContentChange}
       onEditorModeChange={handleEditorModeChange}
     />

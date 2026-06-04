@@ -464,6 +464,20 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 
 ---
 
+### HOTFIX v1.0.1: Audit and Fix Lesson Completion Validation
+**Status:** `DONE`
+**Dependencies:** T-27
+
+**Checklist:**
+- [x] Audit all lessons and create `specs/vim-learning-tutor/validation-audit.md`
+- [x] Identify lessons at high risk of false-negative validation (`normal-mode`, `nav-hjkl`, `nav-words`, `nav-line`, `nav-file`, `search`)
+- [x] Update these 6 lessons to use the `manual` trigger
+- [x] Add `onCheckMission` manual validation handler to `App.tsx`
+- [x] Conditionally render "Check mission" button in `LessonPanel.tsx`
+- [x] Ensure all 83 tests pass and build succeeds
+
+---
+
 ## Phase 8: Stretch Goals (Post v1)
 
 > These are not required for v1. Do not start until v1 is shipped.
