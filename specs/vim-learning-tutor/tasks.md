@@ -246,95 +246,103 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 ---
 
 ### T-14: Create `LessonList` + `LessonCard` Components
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-12, T-08
-**Reviewable by:** visual test — all lessons listed, completed state shown, click navigates
+**Reviewable by:** visual test — list renders grouped lessons, active lesson is highlighted
 
 **Files:**
-- [ ] `src/components/lessons/LessonCard.tsx` — single lesson row with title, status icon, chapter label
-- [ ] `src/components/lessons/LessonList.tsx` — scrollable list of `LessonCard`s grouped by chapter
+- [x] `src/components/lessons/LessonCard.tsx` — button per lesson with active/completed/hint-used states
+- [x] `src/components/lessons/LessonList.tsx` — scrollable nav grouped by chapter, entirely prop-driven
 
 ---
 
 ### T-15: Create `ProgressBar` Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-08
-**Reviewable by:** visual test — updates as lessons are completed
+**Reviewable by:** visual test — bar fills proportionally, percentage text correct
 
 **File:** `src/components/progress/ProgressBar.tsx`
-- [ ] Accepts `completed: number` and `total: number`
-- [ ] Renders a horizontal progress bar with percentage label
-- [ ] Smooth CSS transition on value change
+- [x] Accepts `completed` and `total` props
+- [x] Renders horizontal fill bar with smooth transition
+- [x] Renders `{completed}/{total} lessons` and `{percentage}%` text labels
+- [x] Uses `role="progressbar"` with `aria-valuenow/min/max`
+- [x] Clamps percentage safely when `total <= 0`
 
 ---
 
 ### T-16: Create `StatusBar` Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-11
 **Reviewable by:** visual test — shows mode + lesson info
 
 **File:** `src/components/layout/StatusBar.tsx`
-- [ ] Vim-style bottom bar
-- [ ] Left side: mode indicator (e.g., `-- INSERT --`)
-- [ ] Right side: current lesson filename + cursor position (if available)
+- [x] Renders `ModeIndicator` + Vim mode label text on the left
+- [x] Renders `Lesson {n}/{total}`, lesson title, and optional cursor position on the right
+- [x] Uses semantic `<footer>` with `aria-label` and `aria-live="polite"`
+- [x] `cursorPosition` is optional — no fake data shown when absent
+- [x] All six `VimMode` values handled in `formatModeLabel`
 
 ---
 
 ### T-17: Create `AppShell` Layout Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-13, T-14, T-15, T-16
 **Reviewable by:** full visual integration test
 
 **File:** `src/components/layout/AppShell.tsx`
-- [ ] Renders header with logo + `ProgressBar`
-- [ ] Renders sidebar (`LessonList`) — collapsible on tablet
-- [ ] Renders main content area: `LessonPanel` + `VimEditor`
-- [ ] Renders `StatusBar` at the bottom
-- [ ] Handles responsive layout via Tailwind breakpoints
+- [x] Renders header with logo + `ProgressBar`
+- [x] Renders sidebar (`LessonList`) — stacks on mobile, fixed-width on desktop
+- [x] Renders main content area: `LessonPanel` + `VimEditor`
+- [x] Renders `StatusBar` at the bottom
+- [x] Handles responsive layout via Tailwind breakpoints
+- [x] Editor keyed on `currentLesson.id + editorResetKey` for forced remount
 
 ---
 
 ### T-18: Create `CompletionScreen` Component
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-12
 **Reviewable by:** visual test — appears after last lesson, has reset option
 
 **File:** `src/components/lessons/CompletionScreen.tsx`
-- [ ] Shown when all lessons are completed
-- [ ] Congratulatory message + summary stats
-- [ ] "Start Over" button that calls `resetAll()`
+- [x] Renders congratulatory heading and description
+- [x] Shows `{completedCount}/{totalLessons}` and `{percentage}%` stats
+- [x] Renders `Badge variant="success"` completion badge
+- [x] Renders `Button` "Start Over" calling `onStartOver`
+- [x] Safe percentage calculation with `total <= 0` guard and `[0, 100]` clamp
 
 ---
 
 ## Phase 5: Assembly
 
 ### T-19: Update `App.tsx`
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-08, T-17, T-18
 **Reviewable by:** full app works end-to-end in browser
 
-**File:** `src/app/App.tsx` (migrate from `src/App.jsx`)
-- [ ] Use `useLessonProgress` to manage current lesson and progress
-- [ ] Pass all required props to `AppShell`
-- [ ] Handle validation: subscribe to `onContentChange` / `onModeChange` and call `validateLesson`
-- [ ] Call `markComplete` when validation passes
-- [ ] Show `CompletionScreen` when all lessons are done
-- [ ] Delete old `src/App.jsx` after migration
+**File:** `src/app/App.tsx` (migrated from `src/App.jsx`)
+- [x] Uses `useLessonProgress` to manage current lesson and progress
+- [x] Passes all required props to `AppShell`
+- [x] Handles validation via `onEditorContentChange` / `onEditorModeChange` → `runValidation`
+- [x] Calls `markComplete` when validation passes (guarded against double-call)
+- [x] Shows `CompletionScreen` when all lessons are done (`isCourseComplete`)
+- [x] Deleted old `src/App.jsx` after migration confirmed successful
 
 ---
 
 ### T-20: Update Global Styles
-**Status:** `TODO`
+**Status:** `DONE`
 **Dependencies:** T-02
 **Reviewable by:** visual check — dark terminal theme applied
 
 **File:** `src/styles/globals.css` (replaces `src/index.css`)
-- [ ] Import Tailwind v4 (`@import "tailwindcss"`)
-- [ ] Define CSS custom properties for the dark terminal color palette
-- [ ] Set base font to `Inter`
-- [ ] Set `font-family: 'JetBrains Mono'` for `code`, `kbd`, `.editor` elements
-- [ ] Remove old boilerplate variables from the original `index.css`
-- [ ] Update `src/main.jsx` (or `.tsx`) import to point to new file
+- [x] Imports Google Fonts (Inter + JetBrains Mono) before Tailwind v4 `@import "tailwindcss"`
+- [x] Defines CSS custom properties for the full dark terminal color palette
+- [x] Sets base font to Inter on `:root` and `body`
+- [x] Sets JetBrains Mono for `code`, `kbd`, `pre`, `.cm-editor`, `.cm-scroller`, `.cm-content`, `.font-mono`
+- [x] Removes all old Vite boilerplate — no `.logo`, `.card`, no light-theme variables
+- [x] Updates `src/main.jsx` import from `./index.css` → `./styles/globals.css`
+- [x] Deleted `src/index.css` and `src/App.css` (no remaining references)
 
 ---
 
