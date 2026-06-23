@@ -380,13 +380,20 @@ Use cc to replace the entire line.
   validation: {
     trigger: 'on-change',
     check: (content) =>
-      content.includes('wonderful') && !content.includes('terrible'),
+      content.includes('The weather is wonderful today.') &&
+      !content.includes('The weather is terrible today.') &&
+      !content.includes('This whole sentence is wrong.'),
   },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Chapter 9: Undo & Redo
 // ─────────────────────────────────────────────────────────────────────────────
+
+const undoRedoInitialContent = `This text is correct.
+Make a change below, then undo it.
+
+Change this line, then press u to undo.`;
 
 const undoRedo: Lesson = {
   id: 'undo-redo',
@@ -395,22 +402,17 @@ const undoRedo: Lesson = {
   lessonIndex: 0,
   title: 'Undo and Redo (u Ctrl+r)',
   description: [
-    'u in Normal mode undoes the last change. Press it multiple times to undo further.',
+    'u in Normal mode undoes the last change.',
+    'Press it multiple times to undo further.',
     'Ctrl+r redoes the last undone change. Together, u and Ctrl+r give you a full undo/redo history.',
-    'Vim\'s undo history is persistent and powerful — each insertion, deletion, or change is a separate undo step.',
+    'Vim\'s undo history is persistent and powerful. Each insertion, deletion, or change is a separate undo step.',
   ],
-  initialContent: `This text is correct.
-Make a change below, then undo it.
-
-Change this line, then press u to undo.
-`,
-  mission: 'Edit the last line (add or delete something), press Escape to return to Normal mode, then press u to undo your change and restore the original text.',
+  initialContent: undoRedoInitialContent,
+  mission: 'Edit the last line, press Escape to return to Normal mode, then press u to undo your change and restore the original text.',
   hint: 'Press i to enter Insert mode, type something, press Escape, then press u. The text should revert.',
   validation: {
     trigger: 'on-change',
-    // We check that the fourth line matches the original after undo.
-    check: (content) =>
-      content.includes('Change this line, then press u to undo.'),
+    check: (content) => content.trim() === undoRedoInitialContent.trim(),
   },
 };
 
@@ -423,26 +425,31 @@ const textObjects: Lesson = {
   chapter: 'Chapter 10: Text Objects',
   chapterIndex: 9,
   lessonIndex: 0,
-  title: 'Inner and Around Text Objects (ci( da()',
+  title: 'Inner and Around Text Objects',
   description: [
-    'Text objects let you operate on logical chunks of text, not just characters. The two most common modifiers are i (inner) and a (around).',
-    'ci( means "change inner parentheses" — deletes everything inside () and enters Insert mode. The parentheses themselves remain.',
-    'da( means "delete around parentheses" — deletes the content AND the parentheses themselves.',
-    'You can replace ( with ", \', {, [, or any delimiter. These are some of the most powerful commands in Vim.',
+    'Text objects let you edit a logical part of text, such as text inside quotes or inside parentheses.',
+    'Use i for inner. It targets only the content inside a pair of symbols.',
+    'Use a for around. It targets the content and the surrounding symbols.',
+    'To change text inside quotes, press c, then i, then " double quote. This keeps the quotes and replaces only the text inside them.',
+    'To delete text around parentheses, press d, then a, then (. This deletes the parentheses and everything inside them.',
   ],
   initialContent: `Edit the content inside the parentheses:
-
 greet("world")
 greet("wrong value")
 
-Use ci" to change "world" to "VimTutor".
-Use da( to delete the entire argument including parentheses from the second line.
+Use c + i + " to change the first quoted value.
+Use d + a + ( to delete the entire argument including parentheses from the second line.
 `,
-  mission: 'Move inside the quotes on the first greet line and use ci" to change "world" to "VimTutor".',
-  hint: 'Place your cursor anywhere inside the quotes "world", then press c i " and type VimTutor.',
+  mission:
+    'Move inside "world" on the first greet line. Press c, then i, then " double quote. Type VimTutor, then press Escape. After that, move inside the parentheses on the second greet line. Press d, then a, then (.',
+  hint:
+    'First task: put the cursor inside "world", press c, i, then " double quote, type VimTutor, then press Escape. Second task: put the cursor inside ("wrong value"), then press d, a, and (.',
   validation: {
     trigger: 'on-change',
-    check: (content) => content.includes('"VimTutor"'),
+    check: (content) =>
+      content.includes('greet("VimTutor")') &&
+      !content.includes('greet("world")') &&
+      !content.includes('greet("wrong value")'),
   },
 };
 
