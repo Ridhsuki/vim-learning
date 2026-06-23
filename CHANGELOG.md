@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.0.8] — 2026-06-23
+
+### Added
+- Completion confetti animation on the `CompletionScreen`
+- `MobileDisclaimerModal` informing users that a physical keyboard is required
+
+### Changed
+- Rebranded app from VimTutor to **Vim Learning** across all UI, metadata, and documentation
+- Aligned `react` and `react-dom` versions
+- Removed `.github/dependabot.yml`; automated dependency PRs are no longer used
+
+### Fixed
+- Lesson validation for change commands (`cw`, `cc`), undo/redo, and text objects (`ci(`, `da(`)
+
+---
+
 ## [1.0.7] — 2026-06-05
 
 ### Added
@@ -17,7 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `SECURITY.md` with lightweight vulnerability reporting policy
 - GitHub issue templates: bug report, feature request, and config
 - GitHub pull request template
-- `.github/dependabot.yml` for weekly npm dependency updates
 
 ---
 

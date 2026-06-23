@@ -609,6 +609,6 @@ Create all lessons based on curriculum. Minimum 15 lessons:
 - [x] Add `.github/ISSUE_TEMPLATE/feature_request.yml`
 - [x] Add `.github/ISSUE_TEMPLATE/config.yml`
 - [x] Add `.github/PULL_REQUEST_TEMPLATE.md`
-- [x] Add `.github/dependabot.yml` (weekly npm updates, major-version ignores)
+- [x] Add `.github/dependabot.yml` (weekly npm updates, major-version ignores) — **removed in v1.0.8**
 
 
