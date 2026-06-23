@@ -9,6 +9,7 @@
 
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
+import { CompletionConfetti } from '../effects/CompletionConfetti';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -46,6 +47,9 @@ export function CompletionScreen({
       className={containerClass}
       aria-label="Course completion screen"
     >
+      {/* ── Confetti overlay (non-interactive, respects reduced-motion) ── */}
+      <CompletionConfetti />
+
       {/* ── Decorative top line ── */}
       <div className="font-mono text-[#3fb950] text-sm tracking-widest select-none">
         ──────────────── ✓ ────────────────

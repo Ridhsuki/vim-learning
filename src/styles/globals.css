@@ -166,3 +166,56 @@ pre,
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
 }
+
+/* ── Confetti (CompletionConfetti) ────────────────────────────────────────── */
+
+/*
+ * Keyframe used by CompletionConfetti.tsx.
+ * Pieces start just above the viewport, drift down while rotating, and fade
+ * out before they leave. Duration is controlled per-piece via inline styles.
+ *
+ * The @media block disables the animation for users who prefer reduced motion
+ * (the component also returns null for those users, but this is a belt-and-
+ * suspenders guard at the CSS layer).
+ */
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-8px) rotate(0deg);
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+/* Container — fixed, full-viewport, non-interactive */
+.completion-confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Individual piece — rectangle by default */
+.completion-confetti__piece {
+  position: absolute;
+  animation: confetti-fall linear forwards;
+}
+
+/* Circle variant */
+.completion-confetti__piece--circle {
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .completion-confetti__piece {
+    animation: none;
+    display: none;
+  }
+}

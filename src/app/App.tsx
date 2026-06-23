@@ -24,6 +24,7 @@ import { useLessonProgress } from '../hooks/useLessonProgress';
 import { shouldValidate, validateLesson } from '../lib/lessonValidation';
 import { AppShell } from '../components/layout/AppShell';
 import { CompletionScreen } from '../components/lessons/CompletionScreen';
+import { MobileDisclaimerModal } from '../components/ui/MobileDisclaimerModal';
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
@@ -213,43 +214,49 @@ export default function App() {
 
   if (isCourseComplete) {
     return (
-      <CompletionScreen
-        completedCount={completedCount}
-        totalLessons={totalLessons}
-        onStartOver={handleStartOver}
-        className="min-h-svh"
-      />
+      <>
+        <MobileDisclaimerModal />
+        <CompletionScreen
+          completedCount={completedCount}
+          totalLessons={totalLessons}
+          onStartOver={handleStartOver}
+          className="min-h-svh"
+        />
+      </>
     );
   }
 
   // ── Normal app ─────────────────────────────────────────────────────────────
 
   return (
-    <AppShell
-      lessons={lessons}
-      currentLesson={currentLesson}
-      currentLessonIndex={currentLessonIndex}
-      progress={progress.lessons}
-      completedCount={completedCount}
-      totalLessons={totalLessons}
-      currentMode={currentMode}
-      isCurrentLessonCompleted={isCurrentLessonCompleted}
-      isFirstLesson={isFirstLesson}
-      isLastLesson={isLastLesson}
-      editorResetKey={editorResetKey}
-      onSelectLesson={navigateTo}
-      onPreviousLesson={navigatePrevious}
-      onNextLesson={navigateNext}
-      onResetLesson={handleResetLesson}
-      onResetAllProgress={handleResetAllProgress}
-      onUseHint={useHint}
-      onCheckMission={handleManualValidation}
-      onEditorContentChange={handleEditorContentChange}
-      onEditorModeChange={handleEditorModeChange}
-      onWriteCommand={handleWriteCommand}
-      lastCommand={lastCommand}
-      commandStatus={commandStatus}
-      className="min-h-svh"
-    />
+    <>
+      <MobileDisclaimerModal />
+      <AppShell
+        lessons={lessons}
+        currentLesson={currentLesson}
+        currentLessonIndex={currentLessonIndex}
+        progress={progress.lessons}
+        completedCount={completedCount}
+        totalLessons={totalLessons}
+        currentMode={currentMode}
+        isCurrentLessonCompleted={isCurrentLessonCompleted}
+        isFirstLesson={isFirstLesson}
+        isLastLesson={isLastLesson}
+        editorResetKey={editorResetKey}
+        onSelectLesson={navigateTo}
+        onPreviousLesson={navigatePrevious}
+        onNextLesson={navigateNext}
+        onResetLesson={handleResetLesson}
+        onResetAllProgress={handleResetAllProgress}
+        onUseHint={useHint}
+        onCheckMission={handleManualValidation}
+        onEditorContentChange={handleEditorContentChange}
+        onEditorModeChange={handleEditorModeChange}
+        onWriteCommand={handleWriteCommand}
+        lastCommand={lastCommand}
+        commandStatus={commandStatus}
+        className="min-h-svh"
+      />
+    </>
   );
 }
