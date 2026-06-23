@@ -1,4 +1,4 @@
-# VimTutor 🖮
+# Vim Learning 🖮
 
 > **Learn Vim in your browser** — guided lessons, real Vim keybindings, and local progress tracking.
 

@@ -15,7 +15,7 @@ const modesIntro: Lesson = {
     'The four core modes are: Normal (navigate and edit), Insert (type text), Visual (select text), and Command-line (run commands like :w to save).',
     'When you open Vim, you always start in Normal mode. Most beginners get stuck because they try to type right away. Vim needs you to enter Insert mode first.',
   ],
-  initialContent: `Welcome to VimTutor!
+  initialContent: `Welcome to Vim Learning!
 
 You are currently in Normal mode.
 Your keyboard is for navigation, not typing.

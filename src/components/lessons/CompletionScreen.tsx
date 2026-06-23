@@ -66,7 +66,7 @@ export function CompletionScreen({
           You've mastered the basics of Vim!
         </h1>
         <p className="text-[#8b949e] text-base max-w-md leading-relaxed m-0">
-          You worked through every lesson in the VimTutor course. The motions,
+          You worked through every lesson in the Vim Learning course. The motions,
           modes, and commands you've practised here will stay with you in any
           real Vim session.
         </p>

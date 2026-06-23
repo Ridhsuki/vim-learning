@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-VimTutor is a static educational web application with no backend, no user accounts, and no server-side processing. Only the latest deployed version at [ridhsuki.github.io/vim-learning](https://ridhsuki.github.io/vim-learning/) is actively maintained.
+Vim Learning is a static educational web application with no backend, no user accounts, and no server-side processing. Only the latest deployed version at [ridhsuki.github.io/vim-learning](https://ridhsuki.github.io/vim-learning/) is actively maintained.
 
 | Version | Supported |
 |---------|-----------|

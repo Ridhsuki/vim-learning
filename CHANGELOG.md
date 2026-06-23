@@ -85,7 +85,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [1.0.0] — 2026-06-03
 
 ### Added
-- Initial release of VimTutor web app
+- Initial release of Vim Learning web app
 - 20+ guided Vim lessons covering modes, navigation, editing, visual mode, search, and ex commands
 - CodeMirror 6 editor with full Vim keybindings via `@replit/codemirror-vim`
 - Lesson progress persistence via `localStorage`

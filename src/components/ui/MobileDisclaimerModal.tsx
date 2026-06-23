@@ -133,7 +133,7 @@ export function MobileDisclaimerModal() {
           id={descId}
           className="text-sm text-[#8b949e] leading-relaxed m-0"
         >
-          VimTutor is designed for physical keyboards. On mobile, some keys and
+          Vim Learning is designed for physical keyboards. On mobile, some keys and
           Vim commands (e.g.{' '}
           <code className="font-mono text-[#e6edf3] text-xs">Escape</code>,
           modifier combos) may be limited or unavailable.

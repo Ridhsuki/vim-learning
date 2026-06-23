@@ -1,6 +1,6 @@
 {
-  "name": "VimTutor",
-  "short_name": "VimTutor",
+  "name": "Vim Learning",
+  "short_name": "Vim Learning",
   "description": "Interactive browser-based Vim learning playground with guided lessons.",
   "id": "/vim-learning/",
   "start_url": "/vim-learning/",

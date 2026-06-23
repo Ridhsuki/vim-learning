@@ -1,19 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('VimTutor E2E', () => {
+test.describe('Vim Learning E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
   test('app loads, shows main components, and has correct metadata', async ({ page }) => {
     // Check SEO metadata
-    await expect(page).toHaveTitle('VimTutor | Learn Vim in Your Browser');
+    await expect(page).toHaveTitle('Vim Learning | Learn Vim in Your Browser');
     const manifestUrl = await page.getAttribute('link[rel="manifest"]', 'href');
     expect(manifestUrl).toBe('/vim-learning/site.webmanifest');
 
     // Check main components
     await expect(page.getByRole('banner')).toBeVisible();
-    await expect(page.getByText('VimTutor', { exact: true })).toBeVisible();
+    await expect(page.getByText('Vim Learning', { exact: true })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Lesson roadmap' })).toBeVisible();
     await expect(page.getByRole('article')).toBeVisible(); // LessonPanel
     await expect(page.locator('.cm-editor')).toBeVisible();
@@ -166,8 +166,20 @@ test.describe('VimTutor E2E', () => {
   });
 });
 
-test.describe('VimTutor Mobile E2E', () => {
+test.describe('Vim Learning Mobile E2E', () => {
   test.use({ viewport: { width: 375, height: 667 } }); // iPhone SE viewport
+
+  // The MobileDisclaimerModal is shown on first mobile visit and blocks pointer
+  // events until dismissed. Pre-seed localStorage so the modal never renders,
+  // allowing the test to interact with the underlying UI immediately.
+  // NOTE: The storage key intentionally remains 'vim-tutor:mobile-disclaimer-dismissed'
+  // for backward compatibility — changing it would cause the modal to reappear for
+  // existing users. See MobileDisclaimerModal.tsx for the matching STORAGE_KEY constant.
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem('vim-tutor:mobile-disclaimer-dismissed', '1');
+    });
+  });
 
   test('mobile layout provides navigation tabs and switches views', async ({ page }) => {
     await page.goto('/');

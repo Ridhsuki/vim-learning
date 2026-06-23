@@ -1,4 +1,4 @@
-# Contributing to VimTutor
+# Contributing to Vim Learning
 
 Thank you for your interest in contributing! This document covers everything you need to get started.
 

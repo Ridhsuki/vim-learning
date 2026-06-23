@@ -5,7 +5,7 @@
  *
  * Layout (desktop):
  *   ┌──────────────────────────────────────────────────────┐
- *   │ header: VimTutor · subtitle · ProgressBar            │
+ *   │ header: Vim Learning · subtitle · ProgressBar         │
  *   ├──────────────────┬───────────────────────────────────┤
  *   │ aside: LessonList│ main: LessonPanel | VimEditor     │
  *   ├──────────────────┴───────────────────────────────────┤
@@ -149,7 +149,7 @@ export function AppShell({
         {/* Brand */}
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-base font-bold font-mono text-[#e6edf3] tracking-tight">
-            VimTutor
+            Vim Learning
           </span>
           <span className="hidden sm:inline text-xs text-[#8b949e] font-mono">
             — Learn Vim in your browser
